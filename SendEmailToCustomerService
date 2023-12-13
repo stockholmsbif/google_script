@@ -1,0 +1,44 @@
+function skickaHTMLMejl() {
+  var mejladresser = ["info@bahnhof.se", "sales@bahnhof.se", "kontakt@bahnhof.se"];
+  var ämne = "Avsluta tjänst, kundnr E834392";
+  var meddelande = "Hej, <br><br>Jag skulle vilja avsluta min bredbandstjänst på Friherregatan 90. Mitt kundnummer är <strong>E834392</strong> och mitt namn är Bijan Zarrasvand. Jag mejlade i tisdags men saknar bekräftelse. <br><br>Jag har försökt avsluta tjänsten genom att logga in på mina sidor men tyvärr erbjuds bara att flytta eller överföra tjänsten därifrån. <br><br>Vänligen bekräfta uppsägningen per den 5 dec 2023. <br><br>Hälsningar Bijan Zarrasvand";
+
+  // Kolla om det är lördag eller söndag (dagar 6 och 0 enligt JavaScripts dagnummer)
+  var idag = new Date();
+  var dag = idag.getDay();
+
+  if (dag === 6 || dag === 0) {
+    Logger.log("Det är helg. Mejlet skickas inte.");
+    return; // Mejlet skickas inte om det är lördag eller söndag
+  }
+
+  // Kolla om det är inom tidsintervallet 07:00 till 17:00
+  var timme = idag.getHours();
+
+  if (timme < 7 || timme >= 17) {
+    Logger.log("Det är utanför arbetsdagarstiden. Mejlet skickas inte.");
+    return; // Mejlet skickas inte om det är utanför arbetsdagarstiden
+  }
+
+  // Hämta en slumpmässig fördröjning mellan 1 och 60 minuter (60 000 millisekunder)
+  //var RandomDelay = Math.floor(Math.random() * 15) + 1;      i nedan exempel så lades ett minumum på 3 min
+  var RandomDelay = Math.floor(Math.random() * (15 - 3 + 1)) + 3;
+  RandomDelay *= 15 * 1000; // Konvertera till millisekunder
+
+  RandomDelay -= RandomDelay % (1 * 15 * 1000);
+
+  // Vänta den slumpmässiga fördröjningen
+  Utilities.sleep(RandomDelay);
+
+  var htmlBodyMedFordojning = meddelande + "<br><br>Fördröjning: " + RandomDelay / 1000 + " sekunder";
+
+  // Loopa igenom varje mejladress och skicka mejlet med HTML-formatering
+  for (var i = 0; i < mejladresser.length; i++) {
+    MailApp.sendEmail({
+      to: mejladresser[i],
+      subject: ämne,
+      htmlBody: htmlBodyMedFordojning,
+    });
+  }
+}
+
