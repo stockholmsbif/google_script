@@ -20,15 +20,12 @@ function skickaHTMLMejl() {
     return; // Mejlet skickas inte om det är utanför arbetsdagarstiden
   }
 
-  // Hämta en slumpmässig fördröjning mellan 1 och 60 minuter (60 000 millisekunder)
-  //var RandomDelay = Math.floor(Math.random() * 15) + 1;      i nedan exempel så lades ett minumum på 3 min
+  // Slumpmässigt tal mellan 3 och 15 (inklusive båda gränserna)
   var RandomDelay = Math.floor(Math.random() * (15 - 3 + 1)) + 3;
-  RandomDelay *= 15 * 1000; // Konvertera till millisekunder
 
-  RandomDelay -= RandomDelay % (1 * 15 * 1000);
-
-  // Vänta den slumpmässiga fördröjningen
-  Utilities.sleep(RandomDelay);
+  // Vänta den slumpmässiga fördröjningen i minuter (konvertera till millisekunder)
+  var RandomDelayMS = RandomDelay * 60 * 1000;
+  Utilities.sleep(RandomDelayMS);
 
   var htmlBodyMedFordojning = meddelande + "<br><br>Fördröjning: " + RandomDelay / 1000 + " sekunder";
 
